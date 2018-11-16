@@ -15,7 +15,10 @@ func (c *MainController) Get() {
 
 	RspString += "\r\n\r\nHeaders:\r\n"
 	for k, v := range c.Ctx.Request.Header {
-		RspString = RspString + fmt.Sprintf("%s: %s\r\n", k, v)
+		RspString = RspString + fmt.Sprintf("%s: %s\r\n", k, v[0])
+		if k == "Waf-Test-Case" {
+			c.Ctx.Output.Header("Waf-Test-Case", v[0])
+		}
 	}
 
 	RspString += "\r\n\r\nURL Params:\r\n"
@@ -28,7 +31,8 @@ func (c *MainController) Get() {
 		RspString = RspString + fmt.Sprintf("%s: %s\r\n", k, v)
 	}
 
-	c.Ctx.WriteString(RspString)
+	c.Ctx.Output.Body([]byte(RspString))
+	// c.Ctx.WriteString(RspString)
 
 	// c.Data["Website"] = "beego.me"
 	// c.Data["Email"] = "astaxie@gmail.com"
@@ -41,7 +45,10 @@ func (c *MainController) Post() {
 
 	RspString += "\r\n\r\nHeaders:\r\n"
 	for k, v := range c.Ctx.Request.Header {
-		RspString = RspString + fmt.Sprintf("%s: %s\r\n", k, v)
+		RspString = RspString + fmt.Sprintf("%s: %s\r\n", k, v[0])
+		if k == "Waf-Test-Case" {
+			c.Ctx.Output.Header("Waf-Test-Case", v[0])
+		}
 	}
 
 	RspString += "\r\n\r\nURL Params:\r\n"
@@ -57,7 +64,9 @@ func (c *MainController) Post() {
 	RspString += "\r\n\r\nBody:\r\n"
 	RspString = RspString + string(c.Ctx.Input.RequestBody)
 
-	c.Ctx.WriteString(RspString)
+	c.Ctx.Output.Body([]byte(RspString))
+
+	// c.Ctx.WriteString(RspString)
 
 	// c.Data["Website"] = "beego.me"
 	// c.Data["Email"] = "astaxie@gmail.com"
